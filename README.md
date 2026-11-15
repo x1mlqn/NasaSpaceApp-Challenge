@@ -124,8 +124,8 @@ The repository includes the processed tiles, compiled CSS, and Three.js. Node.js
 
 ## Contributors
 
-- [Rayan El Baghdadi](https://github.com/x1mlqn) — Project development and integration
-- [Yakout El Baghdadi](https://github.com/kakoun-creator) — Data Research
+- [Rayan El Baghdadi](https://github.com/x1mlqn) - Project development and integration
+- [Yakout El Baghdadi](https://github.com/kakoun-creator) - Data Research
 - [Sophia El Baghdadi] - Design and User Experience
 - [Elias El Anjoumi El Amrani](https://github.com/Emnodev) - Testing and validation
 - [Aya Naciri] - Project planning and coordination
