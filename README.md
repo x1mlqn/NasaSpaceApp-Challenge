@@ -1,4 +1,4 @@
-# C’est Lunaire
+# C’est Lunaire !
 
 An interactive lunar South Pole observatory built for the NASA Space Apps Challenge.
 
@@ -18,7 +18,7 @@ C’est Lunaire lets you select a named site, enter coordinates, or click the ma
 
 ## 3. Scientific methodology
 
-### 1. Place the observer on the Moon
+### 1. Placing the observer on the Moon
 
 The app converts the site’s latitude and longitude to a south-polar stereographic map. For latitude $\varphi$ and a reference lunar radius of $R = 1{,}737.4\,\text{km}$, the projected distance from the pole is
 
@@ -28,7 +28,7 @@ The app converts the site’s latitude and longitude to a south-polar stereograp
 
 The app interpolates the four surrounding LOLA elevation samples to estimate the site’s height, then adds that height to the reference radius to place the observer.
 
-### 2. Calculate the local sky
+### 2. Calculating the local sky
 
 JPL’s DE421 ephemeris supplies the hourly positions of the Sun and Earth. To find where each body appears from the selected site, the app subtracts the site’s position from the body’s position. The result is a vector pointing from the observer toward that body.
 
@@ -48,12 +48,12 @@ The app scales this vector to unit length, then measures how much it points **ea
 
 These angles tell the app where to look. The next step checks whether terrain blocks the view by comparing the body’s altitude with the ridgeline at that azimuth.
 
-### 3. Build the terrain horizon
+### 3. Building the terrain horizon
 
 - **Horizon.** The app traces 360 compass bearings and samples the terrain every 30 m out to roughly 100 km. It accounts for the Moon’s curvature and keeps the highest apparent terrain angle along each bearing. It interpolates between bearings to estimate the horizon in the direction of the Sun or Earth.
 - **Local slope.** The app compares elevation samples 225 m to the east, west, north, and south of the site to estimate which way the ground faces.
 
-### 4. Estimate direct sunlight
+### 4. Estimating direct sunlight
 
 The app estimates how much of the solar disk clears the ridge. It then adjusts for the incidence angle, measured between the direction to the Sun and the direction perpendicular to the ground.
 
@@ -61,7 +61,7 @@ The app estimates how much of the solar disk clears the ridge. It then adjusts f
 \text{direct light (\%)} = 100 \times \text{visible disk fraction} \times \max\left(0, \cos(\text{incidence angle})\right)
 ```
 
-### 5. Find joint operating windows
+### 5. Finding joint operating windows
 
 An hour qualifies when both conditions are met.
 
@@ -87,7 +87,7 @@ Consecutive qualifying hours form a joint operating window. **Zone Analysis** co
 
 Named lunar landmarks use the [USGS Gazetteer of Planetary Nomenclature](https://planetarynames.wr.usgs.gov/).
 
-## 5. Validation
+## 5. Verifications
 
 - **Sky geometry.** A Skyfield calculation using DE421 checked all 720 hourly positions at three sites. Maximum differences in altitude or azimuth were below **0.008 arcseconds for the Sun** and **0.10 arcseconds for Earth**.
 - **Terrain and windows.** An independent calculation from the raw LOLA raster agreed with the app’s horizons to within **0.000001°** at those sites and reproduced the same joint windows. The sites had **0 qualifying hours** at Shackleton (89.67°S, 129.78°E), **150** at 89.85°S, 45°E, and **166** at 85°S, 0°E.
