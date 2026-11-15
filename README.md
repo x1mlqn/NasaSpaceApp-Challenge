@@ -105,6 +105,9 @@ AI tools were used to speed up coding and assist with integrating the calculatio
 
 ## Run locally
 
+> **Windows Smart App Control** may block `Start Cest Lunaire.cmd`. If that happens, open a terminal in the project folder and run `python server-local.py` to start the 
+app directly with Python.
+
 Install Python 3 and use a browser with WebGL and gzip DecompressionStream support.
 
 **Windows:** Open the project folder in File Explorer and double-click **Start Cest Lunaire.cmd**. The launcher finds `server-local.py` next to itself, wherever you saved the folder.
