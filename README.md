@@ -1,7 +1,7 @@
 # C’est Lunaire
 
 An interactive lunar South Pole observatory built for the NASA Space Apps Challenge.
-
+![Main Interface Preview](description-images/maininterface.png)
 ## 1. Problem
 
 At the lunar South Pole, the Sun often sits low on the horizon. A nearby ridge can block direct sunlight, while the slope of an illuminated surface affects how much light it receives. Terrain can also obstruct the line of sight toward Earth. Comparing these conditions over time helps explain why nearby sites can offer different opportunities for solar-powered activities and direct-to-Earth communication.
@@ -68,6 +68,7 @@ An hour qualifies when both conditions are met.
 - Earth’s center is above the terrain horizon.
 
 Consecutive qualifying hours form a joint operating window. **Zone Analysis** compares nearby candidates using 72 bearings and 500 m steps. Selecting a candidate runs the detailed calculation at that location.
+![Intersection Graph](description-images/intersectiongraph.png)
 
 ## 4. NASA resources
 
@@ -75,6 +76,7 @@ Consecutive qualifying hours form a joint operating window. **Zone Analysis** co
 | --- | --- |
 | **LRO LOLA `LDEM_75S_30M`** | Native elevation input for 3D terrain, site height, local slope, and horizon calculations. The signed samples encode 0.5 m per count. The repository includes 3,600 lossless tiles and an averaged overview. [NASA PDS LOLA archive](https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/) |
 | **LRO LOLA `LDEM_75S_60M`** | Source for the shaded-relief and elevation map layers. [NASA PDS LOLA archive](https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/polar/img/) |
+![2D elevation map of the lunar South Pole](description-images/2DMap.png)
 | **JPL DE421 and lunar orientation** | Source and reference frame for the bundled hourly Sun and Earth vectors. [NASA’s DE421 lunar frame overview](https://svs.gsfc.nasa.gov/4969/) |
 | **NASA Blue Marble** | Earth globe texture used for display. [NASA Earth Observatory](https://science.nasa.gov/earth/earth-observatory/blue-marble-next-generation/base-map/) |
 
