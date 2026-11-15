@@ -99,6 +99,10 @@ These comparisons verify implementation agreement for the cases tested. Terrain 
 
 Students and educators can connect lunar topography with sunlight and Earth visibility. Researchers and mission-design teams can use the app to compare sites and identify candidates for further analysis. The maps, charts, and exports let users inspect why a site ranked well and share the assumptions behind the result.
 
+## AI assistance
+
+AI tools were used to speed up coding and assist with integrating the calculation engines and datasets.
+
 ## Run locally
 
 Install Python 3 and use a browser with WebGL and gzip DecompressionStream support.
@@ -114,3 +118,11 @@ python server-local.py
 If your system uses `python3` or the Windows `py` launcher, use `python3 server-local.py` or `py -3 server-local.py`. The server opens the app in your browser. Keep the terminal open while using it.
 
 The repository includes the processed tiles, compiled CSS, and Three.js. Node.js and npm are only needed to rebuild the stylesheet with `npm install` and `npm run build:css`, from the same project folder.
+
+## Contributors
+
+- [Rayan El Baghdadi](https://github.com/x1mlqn) — Project development and integration
+- [Yakout El Baghdadi](https://github.com/kakoun-creator) — Data Research
+- [Sophia El Baghdadi] - Design and User Experience
+- [Elias El Anjoumi El Amrani](https://github.com/Emnodev) - Testing and validation
+- [Aya Naciri] - Project planning and coordination
