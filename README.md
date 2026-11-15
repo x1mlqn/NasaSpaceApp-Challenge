@@ -29,19 +29,23 @@ The app interpolates the four surrounding LOLA elevation samples to estimate the
 
 ### 2. Calculate the local sky
 
-For each hour, the app starts with Moon-centered positions for the Sun and Earth from JPL’s DE421 ephemeris. It subtracts the observer’s position, normalizes each direction, and expresses it in local east, north, and up components.
+JPL’s DE421 ephemeris supplies the hourly positions of the Sun and Earth. To find where each body appears from the selected site, the app subtracts the site’s position from the body’s position. The result is a vector pointing from the observer toward that body.
 
-**Altitude** is the angle above the local horizontal.
+The app scales this vector to unit length, then measures how much it points **east**, **north**, and **up** relative to the site. These three components describe the direction in the observer’s local sky.
+
+**Altitude** tells you how high the body appears above the local horizontal. An altitude of 0° is level with the observer, while 90° is directly overhead. The `up` component is measured along the local vertical.
 
 ```math
 \text{altitude} = \arcsin(\text{up})
 ```
 
-**Azimuth** is the compass bearing clockwise from north. The app wraps the result to the 0°–360° range.
+**Azimuth** tells you which way to turn to face the body. It is measured clockwise from north, so north is 0°, east is 90°, south is 180°, and west is 270°. The app uses both horizontal components to find the bearing and wraps the answer into the 0°–360° range.
 
 ```math
 \text{azimuth} = \text{atan2}(\text{east}, \text{north})
 ```
+
+These angles tell the app where to look. The next step checks whether terrain blocks the view by comparing the body’s altitude with the ridgeline at that azimuth.
 
 ### 3. Build the terrain horizon
 
