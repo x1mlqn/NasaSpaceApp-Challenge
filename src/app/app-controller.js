@@ -76,11 +76,15 @@
     const {sinTheta,cosTheta}=horizonRayCache;
     const sinLon=Math.sin(lam1),cosLon=Math.cos(lam1),upX=cosPhi1*sinLon,upY=cosPhi1*cosLon,upZ=sinPhi1;
     const eastX=cosLon,eastY=-sinLon,northX=-sinPhi1*sinLon,northY=-sinPhi1*cosLon,northZ=cosPhi1;
+    const dem=window.CEST_TILED_DEM;
+    const sampleHorizon=dem?.ready
+      ? (x,north)=>dem.sampleEncodedWorld(x*1000,north*1000,true)
+      : (x,north)=>sampleGray((x/MAX_KM+1)*.5*(heightCanvas.width-1),(1-north/MAX_KM)*.5*(heightCanvas.height-1));
     let sliceStarted=performance.now();
     for(let a=0;a<360;a++){
       const az=a*Math.PI/180,sinAz=Math.sin(az),cosAz=Math.cos(az),dirX=eastX*sinAz+northX*cosAz,dirY=eastY*sinAz+northY*cosAz,dirZ=northZ*cosAz;let highestTan=-Infinity;
       for(let k=1;k<=maxSteps;k++){
-        const sinTh=sinTheta[k],cosTh=cosTheta[k],destX=upX*cosTh+dirX*sinTh,destY=upY*cosTh+dirY*sinTh,destZ=upZ*cosTh+dirZ*sinTh,scale=2*RMOON/(1-destZ),mapX=scale*destX,mapNorth=scale*destY,pixelX=(mapX/MAX_KM+1)*.5*(heightCanvas.width-1),pixelY=(1-mapNorth/MAX_KM)*.5*(heightCanvas.height-1),g=sampleGray(pixelX,pixelY);
+        const sinTh=sinTheta[k],cosTh=cosTheta[k],destX=upX*cosTh+dirX*sinTh,destY=upY*cosTh+dirY*sinTh,destZ=upZ*cosTh+dirZ*sinTh,scale=2*RMOON/(1-destZ),mapX=scale*destX,mapNorth=scale*destY,g=sampleHorizon(mapX,mapNorth);
         if(g===null)break;
         const rt=RMOON+grayToMeters(g)/1000,tangent=(rt*cosTh-r0)/(rt*sinTh);
         if(tangent>highestTan)highestTan=tangent;
@@ -112,7 +116,7 @@
     if(scanStatus)scanStatus.textContent='Ready to analyze the area around the selected site.';
     if(scanResults){scanResults.replaceChildren();scanResults.hidden=true}
     const {series,horizon}=calculated;
-    current={id:siteId,name,lat,lon,demId:window.CEST_TILED_DEM?.metadata?.id||'legacy',elevation:heightMeters(lat,lon),series,horizon:Array.from(horizon),normal:E.surfaceNormal(lat,lon,heightMeters)};
+    current={id:siteId,name,lat,lon,demId:window.CEST_TILED_DEM?.metadata?.id||'legacy',elevation:calculated.elevation ?? heightMeters(lat,lon),series,horizon:Array.from(horizon),normal:calculated.normal ?? E.surfaceNormal(lat,lon,heightMeters)};
     prepareIntervals(current);
     document.body.classList.remove('metrics-pending');
     if(siteId==='custom'){if(!$select.querySelector('option[value="custom"]')){const o=document.createElement('option');o.value='custom';$select.prepend(o)}$select.querySelector('option[value="custom"]').textContent=`${name} · ${latLabel(lat)}`}
@@ -127,11 +131,11 @@
     try{
       markMetricsPending();
       if(!silent)window.CEST_TERRAIN3D?.setSite(lat,lon,name);
-      if(window.CEST_TILED_DEM?.ready){const center=projection(lat,lon);releaseTiles=await window.CEST_TILED_DEM.ensureRegionMeters(center.x*1000,center.north*1000,103000,()=>calculationId!==calculationGeneration);if(calculationId!==calculationGeneration)return;}
-      const key=`${window.CEST_TILED_DEM?.metadata?.id||'legacy'}:${lat.toFixed(5)},${lon.toFixed(5)}`;
+      const key=`${window.CEST_TILED_DEM?.metadata?.id||'legacy'}:${lat},${lon}`;
       const known=sourceSites.find(site=>site.modelVersion===E.MODEL_VERSION&&site.demSize===(window.CEST_TILED_DEM?.metadata?.width||heightCanvas.width)&&(!window.CEST_TILED_DEM?.ready||(site.demId===window.CEST_TILED_DEM.metadata.id&&site.horizonStepMeters===30))&&Math.abs(site.lat-lat)<1e-8&&Math.abs(site.lon-lon)<1e-8);
-      const cached=calculationCache.get(key)||known;
+      const cached=calculationCache.get(key)||(known && {series:known.series,horizon:known.horizon});
       if(cached&&calculationCache.has(key)){calculationCache.delete(key);calculationCache.set(key,cached)}
+      if(window.CEST_TILED_DEM?.ready && (!cached || !Number.isFinite(cached.elevation) || !cached.normal)){const center=projection(lat,lon);releaseTiles=await window.CEST_TILED_DEM.ensureRegionMeters(center.x*1000,center.north*1000,cached ? 300 : 103000,()=>calculationId!==calculationGeneration);if(calculationId!==calculationGeneration)return;}
       if(cached){commitPoint(lat,lon,name,siteId,cached);return}
       if(calculationId!==calculationGeneration)return;
       const horizon=await computeHorizon(lat,lon,()=>calculationId!==calculationGeneration);
@@ -142,7 +146,7 @@
         const vv=SKY[i],s=observe(vv,siteVec,basis,0),e=observe(vv,siteVec,basis,3);
         series[i]={t:sourceSites[0].series[i].t,s:s.alt,sa:s.az,sd:s.distanceKm,e:e.alt,ea:e.az,ed:e.distanceKm};
       }
-      const computed={series,horizon};calculationCache.set(key,computed);
+      const computed={series,horizon,elevation:hm,normal:E.surfaceNormal(lat,lon,heightMeters)};calculationCache.set(key,computed);
       if(calculationCache.size>24)calculationCache.delete(calculationCache.keys().next().value);
       commitPoint(lat,lon,name,siteId,computed);
     }catch(error){

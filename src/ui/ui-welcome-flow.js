@@ -7,8 +7,6 @@
   const welcomeCard = document.getElementById('welcomeCard');
   const helloCard = document.getElementById('helloCard');
   const helloName = document.getElementById('helloName');
-  const helloMode = document.getElementById('helloMode');
-  const enterButton = document.getElementById('helloEnterButton');
   const greeting = document.getElementById('userGreeting');
   const profileButton = document.getElementById('profileBtn');
   const modeLabels = { public: 'Explorer', teacher: 'Teacher/Researcher' };
@@ -44,7 +42,6 @@
     });
     const activeLabel = document.getElementById('activeModeLabel');
     if (activeLabel) activeLabel.textContent = modeLabels[mode].toLocaleUpperCase('en-US');
-    if (helloMode) helloMode.textContent = `MODE ${modeLabels[mode].toLocaleUpperCase('en-US')}`;
   }
 
   function applyExpertiseMode(mode, notify = false) {
@@ -95,17 +92,12 @@
     applyProfile(next);
     welcomeCard.hidden = true;
     helloCard.hidden = false;
-    enterButton.disabled = true;
     document.body.classList.add('welcome-active', 'hello-active');
     document.body.classList.remove('welcome-editing');
     screen.setAttribute('aria-hidden', 'false');
     requestAnimationFrame(() => helloCard.classList.add('is-arriving'));
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    timers.push(setTimeout(() => {
-      enterButton.disabled = false;
-      enterButton.classList.add('is-ready');
-      timers.push(setTimeout(enterObservatory, reducedMotion ? 350 : 1100));
-    }, reducedMotion ? 100 : 1600));
+    timers.push(setTimeout(enterObservatory, reducedMotion ? 450 : 1600));
   }
 
   function showWelcome() {
@@ -118,7 +110,6 @@
     document.body.classList.add('welcome-active', 'welcome-editing');
     document.body.classList.remove('hello-active');
     screen.setAttribute('aria-hidden', 'false');
-    requestAnimationFrame(() => nameInput.focus({ preventScroll: true }));
   }
 
   profile = loadProfile();
@@ -147,6 +138,5 @@
     showHello(next);
   });
 
-  enterButton.addEventListener('click', enterObservatory);
   profileButton?.addEventListener('click', showWelcome);
 })();

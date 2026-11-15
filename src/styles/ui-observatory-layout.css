@@ -453,3 +453,9 @@ body .app-shell .timeline-panel .time-scrub {
 .terrain-stage #mapDetailStatus:not(:empty) { position:static!important; white-space:normal; color:#ffe1a1; }
 
 body:not(.terrain-fullscreen):not(.terrain-2d-mode) .terrain-top-controls .terrain-caption { display:none; }
+
+.welcome-form #visitorName:focus {
+  outline:none;
+  box-shadow:none;
+  border-color:#85919e;
+}
