@@ -1,0 +1,13 @@
+{
+  "name": "cest-lunaire",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive lunar South Pole observatory",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/styles/tailwind.generated.css --minify",
+    "watch:css": "tailwindcss -i ./src/styles/tailwind.css -o ./assets/styles/tailwind.generated.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

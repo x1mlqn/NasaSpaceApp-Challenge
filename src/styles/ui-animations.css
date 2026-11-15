@@ -1,0 +1,90 @@
+/* Occasional UI state changes only; simulation values and canvas rendering stay immediate. */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --motion-fast: 160ms;
+  --motion-popover: 400ms;
+  --motion-surface: 600ms;
+  --motion-text: 600ms;
+  --motion-stagger: 80ms;
+  --motion-window: 1000ms;
+  --motion-data: 600ms;
+}
+/* Remove legacy blur/zoom and animated layout on the scientific workspace. */
+.page-wrap,.mode-shifting .page-wrap { filter: none; transform: none; opacity: 1; transition: none; }
+.mode-shifting :is(.workspace,.timeline-panel,.operations-panel,.lower-grid) { transition: none; }
+body.terrain-fullscreen.fullscreen-entering :is(.globe-panel,.insight-panel,.timeline-panel,.terrain-head,.terrain-controls) { animation: none; will-change: auto; }
+.welcome-card,.hello-card.is-arriving { animation: none; filter: none; }
+.hello-orb { animation: none; }
+.welcome-orbit { animation: none; }
+.panel:not(.globe-panel):hover,.site-rail:hover { transform: none; }
+.hello-enter { transition: opacity var(--motion-popover) var(--ease-out),transform var(--motion-popover) var(--ease-out),border-color var(--motion-fast) ease,color var(--motion-fast) ease; }
+.toast { transition: opacity var(--motion-popover) var(--ease-out),transform var(--motion-popover) var(--ease-out); }
+.toast:not(.show) { opacity: 0; transform: translateY(12%); }
+.toast.show { opacity: 1; transform: translateY(0); }
+.terrain-stage .map-point-choice { transform: translate(-50%,50%) scale(.97); transform-origin: bottom center; transition: opacity var(--motion-popover) var(--ease-out),transform var(--motion-popover) var(--ease-out),visibility var(--motion-popover); }
+.terrain-stage .map-point-choice.visible { transform: translate(-50%,50%) scale(1); }
+/* Keep display changes alive until their fade completes; older browsers retain immediate toggles. */
+@supports (transition-behavior: allow-discrete) {
+  .modal-backdrop {
+    opacity: 0; pointer-events: none;
+    transition: opacity var(--motion-surface) var(--ease-out),display var(--motion-surface) allow-discrete;
+  }
+  .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+  .modal-backdrop .modal { opacity: 0; transform: scale(.96); transition: opacity var(--motion-surface) var(--ease-out),transform var(--motion-surface) var(--ease-out); }
+  .modal-backdrop.open .modal { opacity: 1; transform: scale(1); }
+  .welcome-screen { opacity: 0; pointer-events: none; transition: opacity var(--motion-surface) var(--ease-out),display var(--motion-surface) allow-discrete; }
+  body.welcome-active .welcome-screen { opacity: 1; pointer-events: auto; }
+  .welcome-card,.hello-card {
+    grid-area: 1 / 1; opacity: 1; transform: none;
+    transition: opacity var(--motion-surface) var(--ease-out),transform var(--motion-surface) var(--ease-out),display var(--motion-surface) allow-discrete;
+  }
+  .welcome-card[hidden],.hello-card[hidden] { display: none !important; opacity: 0; transform: translateY(2%) scale(.97); pointer-events: none; }
+  .hello-card:not([hidden]) { display: grid; }
+  .lunar-rover {
+    animation: none; opacity: 1; transform: none;
+    transition: opacity var(--motion-popover) var(--ease-out),transform var(--motion-popover) var(--ease-out),display var(--motion-popover) allow-discrete;
+  }
+  .lunar-rover[hidden] { opacity: 0; transform: translateY(8%); pointer-events: none; }
+  .fullscreen-data-content {
+    opacity: 1;
+    transition: opacity var(--motion-popover) var(--ease-out),display var(--motion-popover) allow-discrete;
+  }
+  .fullscreen-data-content[hidden] { opacity: 0; pointer-events: none; }
+  .terrain-loading { opacity: 0; pointer-events: none; transition: opacity var(--motion-popover) var(--ease-out),display var(--motion-popover) allow-discrete; }
+  .terrain-loading.visible { opacity: 1; pointer-events: auto; }
+  @starting-style {
+    .terrain-loading.visible { opacity: 0; }
+    .modal-backdrop.open { opacity: 0; }
+    .modal-backdrop.open .modal { opacity: 0; transform: scale(.96); }
+    body.welcome-active .welcome-screen { opacity: 0; }
+    .welcome-card:not([hidden]),.hello-card:not([hidden]) { opacity: 0; transform: translateY(2%) scale(.97); }
+    .lunar-rover:not([hidden]) { opacity: 0; transform: translateY(8%); }
+    .fullscreen-data-content:not([hidden]) { opacity: 0; }
+  }
+}
+/* Native progressive disclosure: fade content without replacing semantics or keyboard behavior. */
+@supports selector(details::details-content) {
+  .curious-section details::details-content { opacity: 0; transition: opacity var(--motion-popover) var(--ease-out),content-visibility var(--motion-popover) allow-discrete; }
+  .curious-section details[open]::details-content { opacity: 1; }
+}
+@media (hover: hover) and (pointer: fine) {
+  html[data-motion-input="pointer"] :is(.welcome-submit,.hello-enter,.expertise-option,.palette-option,.nav-item,.mode,.curious-section button):active { scale: .97; }
+  :is(.welcome-submit,.hello-enter,.expertise-option,.palette-option,.nav-item,.mode,.curious-section button) { transition: scale var(--motion-fast) var(--ease-out),background-color var(--motion-fast) ease,color var(--motion-fast) ease,border-color var(--motion-fast) ease; }
+}
+/* Keyboard shortcuts and repeated scientific controls respond immediately. */
+html[data-motion-input="keyboard"] :is(.modal-backdrop,.modal,.welcome-screen,.welcome-card,.hello-card,.hello-enter,.lunar-rover,.map-point-choice,.fullscreen-data-content,.toast) { animation: none !important; transition-duration: 0ms !important; }
+@media (prefers-reduced-motion: reduce) {
+  .welcome-card,.hello-card,.modal-backdrop .modal,.lunar-rover,.hello-enter,.toast { transform: none !important; }
+  .terrain-stage .map-point-choice,.terrain-stage .map-point-choice.visible { transform: translate(-50%,50%); }
+  :is(.modal-backdrop,.modal,.welcome-screen,.welcome-card,.hello-card,.hello-enter,.lunar-rover,.map-point-choice,.fullscreen-data-content,.toast) { animation: none !important; transition-duration: 160ms !important; }
+  html[data-motion-input="keyboard"] :is(.modal-backdrop,.modal,.welcome-screen,.welcome-card,.hello-card,.hello-enter,.lunar-rover,.map-point-choice,.fullscreen-data-content,.toast) { transition-duration: 0ms !important; }
+  :is(.welcome-submit,.hello-enter,.expertise-option,.palette-option,.nav-item,.mode,.curious-section button):active { scale: 1 !important; }
+}
+
+html[data-motion-input="keyboard"] .terrain-loading { transition-duration: 0ms; }
+@media (prefers-reduced-motion: reduce) { .terrain-loading { transition-duration: 160ms; } }
+
+/* Fullscreen panel collapse owns its fade/height sequence; no delayed display transition. */
+.fullscreen-data-content { transition: none !important; }
+body.terrain-fullscreen.fullscreen-data-collapsed .insight-panel { height: auto; min-height: 0; bottom: auto; max-height: calc(100dvh - 110px); }

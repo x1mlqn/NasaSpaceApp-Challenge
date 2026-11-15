@@ -1,0 +1,1 @@
+window.CEST_DEM={manifest:'assets/dem30/manifest.json',nativeResolutionMeters:30};

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "id": "LDEM_75S_30M.V2.0",
+  "width": 30496,
+  "height": 30496,
+  "sampleMeters": 30,
+  "scaleMeters": 0.5,
+  "encodingOffset": 32768,
+  "centerPixel": 15247.5,
+  "referenceRadiusMeters": 1737400,
+  "projection": "south-polar-stereographic",
+  "longitude": "east",
+  "tileSize": 512,
+  "tileColumns": 60,
+  "tileRows": 60,
+  "tilePattern": "tiles/{x}_{y}.bin.gz",
+  "compression": "gzip",
+  "overview": {
+    "url": "overview.bin.gz",
+    "width": 3812,
+    "height": 3812,
+    "factor": 8,
+    "firstNativePixel": 3.5
+  },
+  "source": {
+    "img": "LDEM_75S_30M.IMG",
+    "label": "LDEM_75S_30M.LBL",
+    "bytes": 1860012032,
+    "sha256": "0d7128e5b70423e1586bb64186751671c194d85a492a52be8513c01a67eea5f9"
+  },
+  "tileBytes": 1101267953
+}

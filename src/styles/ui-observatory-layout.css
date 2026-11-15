@@ -1,0 +1,455 @@
+/* Observatoire immersif. Flat scientific surfaces; existing data and terrain stay live. */
+:root,[data-theme="space"] {
+  --sans: "Segoe UI", Arial, sans-serif; --display: Bahnschrift, "Arial Narrow", "Segoe UI", sans-serif;
+  --mono: Consolas, "Courier New", monospace; --mission-radius: 0px;
+  --bg:#000000; --bg-gradient-start:#000000; --bg-gradient-end:#000000;
+  --mission-surface:#000000; --mission-surface-raised:#111111;
+  --mission-stroke:#29323c; --mission-stroke-strong:#647181;
+  --mission-ink:#e5eaf0; --mission-muted:#aab6c4; --mission-faint:#a0acba;
+}
+html { scroll-behavior:auto; }
+body,body:not(.terrain-fullscreen):not(.welcome-active) { background:#000000; background-image:none; }
+/* Remove inherited ornamental effects without suppressing meaningful state/focus indicators. */
+:is(.app-shell,.welcome-screen,.modal-backdrop) :is(.panel,button,input,select,.brand-mark,.mode-switch,.segmented,.modal,.stat,.local-metric,.site-coordinates,.insight-callout,.map-layer-switch,.height-legend,.terrain-caption,.terrain-readout,.sky-position-hud,.celestial-cue,.view-height-control,.fullscreen-light-control,.operation-result,.intersection-badge,.fullscreen-intersection,.expertise-option,.hello-mode,.mode-pill,.utc-pill,.curious-section,.map-point-choice,.earth-zone-result) {
+  border-radius:0!important; box-shadow:none!important; text-shadow:none!important;
+  backdrop-filter:none!important; -webkit-backdrop-filter:none!important;
+}
+:is(.app-shell,.welcome-screen) :is(button,a):hover { transform:none!important; }
+:is(.app-shell,.welcome-screen) :is(button,a) { transition:none!important; }
+.panel,.panel:hover,.advanced-analysis { background:#000000!important; box-shadow:none!important; }
+.topbar { position:relative; min-height:76px; height:auto; padding:12px 28px; background:#000000; box-shadow:none; backdrop-filter:none; gap:20px; }
+.topbar-left { flex-wrap:nowrap; gap:20px; }
+.observatory-wordmark { color:#e5eaf0; font-size:22px; font-family:var(--display); letter-spacing:-.03em; white-space:nowrap; }
+.observatory-wordmark small { display:block; margin-top:5px; color:#aab6c4; font:11px var(--sans); letter-spacing:0; }
+.rover-logo .brand-mark { border:0; background:none; font:32px Georgia,serif; color:#e5eaf0; }
+.command-navigation .nav-item { min-height:44px; padding:10px 12px; border:0; background:none; color:#aab6c4; font-size:13px; }
+.command-navigation .nav-item.active { color:#e5eaf0; background:none; border-bottom:1px solid #b7cdf2; box-shadow:none; }
+.top-right { gap:10px; flex-wrap:nowrap; }
+.top-right .audience { flex:0 1 auto; width:auto; padding:0; margin:0; }
+.top-right .audience-label,.top-right .mode-pill,.top-right .utc-pill,.top-right .user-greeting { display:none; }
+.mode-switch { display:flex; gap:6px; padding:0; border:0; background:none; }
+.mode-switch .mode { min-height:44px; padding:10px 14px; border:0; border-bottom:1px solid transparent; background:transparent; color:#aab6c4; font-size:12px; }
+.mode-switch .mode.active { color:#e5eaf0; border-bottom-color:#b7cdf2; background:transparent; }
+.profile-button,.icon-button { padding:8px; font:12px var(--sans); color:#aab6c4; background:none; border:0; }
+.page-wrap { max-width:none; padding:0; }
+body:not(.terrain-fullscreen) .workspace { display:grid; grid-template-columns:minmax(0,1fr) 360px!important; gap:0!important; min-height:0; height:auto; margin:0; align-items:stretch; }
+body:not(.terrain-fullscreen) .workspace > .globe-panel { position:relative; min-height:620px; height:clamp(620px,calc(100dvh - 300px),900px); margin:0!important; border:0; border-bottom:1px solid #29323c; background:#000000; overflow:hidden; }
+body:not(.terrain-fullscreen) .workspace > .insight-panel { margin:0!important; min-height:0; max-height:clamp(620px,calc(100dvh - 300px),900px); padding:28px 28px 24px; border:0; border-left:1px solid #29323c; border-bottom:1px solid #29323c; overflow-y:auto; }
+body:not(.terrain-fullscreen) .hero { position:absolute; z-index:6; left:30px; top:28px; min-height:0; max-width:460px; display:block; margin:0; padding:0; border:0; pointer-events:none; }
+.hero .eyebrow { color:#b9c8d9; font:10px var(--mono); letter-spacing:.17em; }
+.hero .eyebrow-line { display:none; }
+.hero h1 { margin:0; color:#e5eaf0; font:400 clamp(32px,3.2vw,48px)/1.02 var(--display); letter-spacing:-.045em; }
+.hero-copy { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+body:not(.terrain-fullscreen) .globe-stage.terrain-stage { position:absolute; inset:0; margin:0; height:100%!important; min-height:0!important; border:0; border-radius:0; background:#000000; }
+body:not(.terrain-fullscreen) .terrain-head { position:absolute; z-index:7; top:24px; right:24px; min-height:0; max-width:250px; padding:0; border:0; background:none; }
+body:not(.terrain-fullscreen) .terrain-head > div:first-child { display:none; }
+body:not(.terrain-fullscreen) .terrain-tools { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:6px; }
+body:not(.terrain-fullscreen) .coordinate-form { flex:1 0 100%; width:250px; background:#000000; border-color:#647181; }
+.coordinate-form input { font-size:11px; }
+body:not(.terrain-fullscreen) .terrain-head .round-button { background:#000000; color:#e5eaf0; border-color:#647181; }
+body:not(.terrain-fullscreen) .terrain-caption { top:173px; left:30px; max-width:calc(100% - 60px); background:#000000; color:#aab6c4; border:0; padding:6px 8px; font-size:9px; }
+body:not(.terrain-fullscreen) .terrain-caption b { display:block; margin-top:3px; }
+body:not(.terrain-fullscreen) .sky-position-hud { top:auto; bottom:130px; left:30px; width:220px; background:#000000; border-color:#647181; padding:12px; }
+.sky-compass { background:none; }
+.sky-position-hud,.celestial-cue,.terrain-readout { box-shadow:none!important; backdrop-filter:none!important; border-radius:0!important; }
+.celestial-cue { background:#000000; }
+body:not(.terrain-fullscreen) .terrain-controls { bottom:64px; left:30px; background:none; }
+.terrain-controls button { background:#000000!important; border-color:#647181!important; color:#d5e0ed!important; }
+.terrain-controls .view-switch button[aria-pressed="true"] { background:#d5e0ed!important; color:#000000!important; }
+body:not(.terrain-fullscreen) .terrain-readout { bottom:18px; left:30px; max-width:calc(100% - 60px); background:#000000; border:0; color:#aab6c4; }
+body:not(.terrain-fullscreen) .drag-hint { bottom:103px; right:24px; max-width:230px; background:#000000; padding:5px 8px; color:#aab6c4; }
+body:not(.terrain-fullscreen) .view-height-control { right:24px; bottom:18px; background:#000000; }
+body:not(.terrain-fullscreen) .globe-legend { position:absolute; bottom:0; visibility:hidden; pointer-events:none; }
+body:not(.terrain-fullscreen) .map-layer-switch { position:absolute; z-index:8; top:236px; right:24px; background:#000000; }
+body:not(.terrain-fullscreen) .height-legend { top:320px; right:24px; background:#000000; }
+.insight-panel .panel-head { min-height:0; padding:0 0 20px; border:0; }
+.insight-panel .section-index { font:12px var(--sans); letter-spacing:0; color:#aab6c4; }
+.insight-panel h2 { margin:10px 0 0; font-size:34px; font-weight:400; letter-spacing:-.02em; }
+.select-caret { display:none; }
+.site-select-wrap { margin:0 0 18px; }
+.site-select-wrap select { min-height:44px; background:#000000; border:1px solid #647181; font-size:13px; color:#d5e0ed; }
+.insight-callout { margin:0 0 18px; padding:0; border:0; background:none; color:#aab6c4; }
+.insight-callout p { color:#aab6c4; font-size:12px; line-height:1.65; }
+.stat-grid { display:flex; flex-direction:column; gap:0; margin:0; border:0; }
+.stat-grid .stat { display:grid; grid-template-columns:1fr auto; align-items:center; gap:6px 12px; padding:18px 0; background:none; border:0; border-top:1px solid #29323c; }
+.stat-label { max-width:150px; font:12px/1.45 var(--sans); letter-spacing:0; color:#c0cbd8; }
+.stat strong { font:400 34px/1.1 var(--display); letter-spacing:-.025em; }
+.stat small { grid-column:2; text-align:right; font:11px var(--sans); color:#aab6c4; }
+.stat .stat-flex { justify-content:flex-end; }
+.mini-track { display:none; }
+.observatory-explore { display:block; margin:8px 0 24px; min-height:46px; padding:12px 18px; background:#c0cfdf; color:#000000; text-align:center; font-size:14px; font-weight:600; text-decoration:none; }
+.observatory-fact { padding:22px 0; border-block:1px solid #29323c; }
+.observatory-fact h3 { font:500 15px var(--sans); color:#e5eaf0; margin:0 0 12px; }
+.observatory-fact p { margin:0 0 12px; font:13px/1.65 var(--sans); color:#aab6c4; }
+.observatory-fact a { color:#c0cfdf; font:12px var(--sans); text-underline-offset:4px; }
+.fullscreen-site-metrics { margin-top:20px; gap:0; }
+.fullscreen-site-metrics .local-metric { border:0; border-bottom:1px solid #29323c; background:none; padding:12px 0; }
+.fullscreen-site-metrics .local-metric:nth-child(even) { padding-left:12px; }
+.site-coordinates { padding:14px 0; margin:0; border:0; background:none; }
+.scale-disclaimer { margin:15px 0; }
+.advanced-analysis { margin-top:20px; padding:15px 0; border-inline:0; }
+.research-export { margin:12px 0; }
+.timeline-panel { margin:0; padding:24px 30px 20px; border:0; border-bottom:1px solid #29323c; }
+.timeline-top { align-items:center; gap:20px; }
+.timeline-top h2 { font-size:20px; margin:0; font-weight:400; }
+.timeline-top .section-index,.timeline-top .panel-subtitle { display:none; }
+.timeline-controls { gap:18px; }
+.segmented { border:0; background:none; padding:0; gap:6px; }
+.segmented button { min-height:38px; padding:8px 12px; border:1px solid transparent; background:none; color:#aab6c4; font-size:12px; }
+.segmented button.active { background:#111111; border-color:#647181; }
+.intersection-badge { background:none!important; border:0!important; font-size:11px; }
+.timeline-chart { margin-top:16px; }
+.chart-inner canvas { height:105px; }
+.chart-y-labels { height:105px; }
+.time-scrub { margin-top:14px; }
+.curious-panel { margin:0; padding:32px 30px; border:0; border-bottom:1px solid #29323c; }
+body.mode-teacher .curious-panel { display:none; }
+.curious-panel > .panel-head { padding:0 0 20px; min-height:0; }
+.curious-panel > .panel-head h2 { font-size:24px; font-weight:400; }
+.curious-section { padding:22px 0; border-top:1px solid #29323c; background:none; }
+.curious-section .curious-icon { display:none; }
+.curious-section p { max-width:75ch; font-size:14px; }
+.curious-section button { background:#111111; border-color:#647181; }
+.curious-section button[aria-pressed="true"] { background:#1a1a1a; border-color:#b7cdf2; box-shadow:none; }
+.curious-section button > span[aria-hidden="true"] { display:none; }
+.operations-panel { margin:0; padding:30px; border:0; border-bottom:1px solid #29323c; }
+.lower-grid { gap:0; margin:0; }
+.lower-grid > .panel { border:0; padding:20px 12px; }
+.observatory-footer { margin:0; padding:24px 30px; border-top:1px solid #29323c; }
+.usage-notes { display:flex; gap:24px; padding:0 30px 24px; color:#aab6c4; font-size:12px; }
+.usage-notes details { max-width:60ch; flex:1; }
+.usage-notes summary { width:fit-content; min-height:32px; cursor:pointer; }
+.usage-notes p { line-height:1.7; }
+.terrain-loading { background:#000000; font:14px var(--sans); color:#c0cfdf; }
+.terrain-loading::after { content:""; display:block; width:220px; height:8px; margin:18px auto 0; background:#29323c; border-right:60px solid #647181; }
+/* Welcome retains the supplied Moon; controls use the same flat vocabulary. */
+.welcome-screen { background:#000000; }
+.welcome-masthead .brand-mark { border:0; }
+.welcome-layout .expertise-option,.welcome-layout .expertise-option.selected { box-shadow:none; }
+.welcome-submit,.hello-enter { background:#c0cfdf; color:#000000; border:0; }
+:is(.welcome-screen,.app-shell) :is(.welcome-submit,.hello-enter) :is(span,b) { display:none; }
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible { outline:2px solid #b7cdf2; outline-offset:4px; box-shadow:none!important; }
+body.terrain-fullscreen .hero { display:none; }
+body.terrain-fullscreen .insight-panel,body.terrain-fullscreen .timeline-panel,body.terrain-fullscreen .terrain-head { background:#000000!important; backdrop-filter:none!important; box-shadow:none!important; border-radius:0!important; }
+body.terrain-fullscreen .insight-panel { padding:14px; }
+body.terrain-fullscreen .insight-panel h2 { font-size:20px; }
+body.terrain-fullscreen .stat-grid .stat { padding:8px 0; }
+body.terrain-fullscreen .stat strong { font-size:22px; }
+body.terrain-fullscreen .observatory-fact,body.terrain-fullscreen .observatory-explore { display:none; }
+body.terrain-fullscreen .timeline-panel { padding:10px 14px; }
+@media (max-width:1150px) {
+  .topbar { padding:12px 20px; flex-wrap:wrap; }
+  .topbar-left { flex:1; justify-content:space-between; }
+  .top-right { margin-left:auto; }
+  body:not(.terrain-fullscreen) .workspace { grid-template-columns:minmax(0,1fr) 330px!important; }
+  body:not(.terrain-fullscreen) .workspace > .insight-panel { padding:24px 22px; }
+  body:not(.terrain-fullscreen) .hero { left:22px; top:24px; }
+  .hero h1 { font-size:31px; max-width:310px; }
+  body:not(.terrain-fullscreen) .terrain-head { top:150px; right:22px; }
+  body:not(.terrain-fullscreen) .terrain-caption { top:245px; left:22px; }
+  .topbar .command-navigation { gap:0; }
+  .topbar .command-navigation .nav-item { font-size:12px; padding-inline:9px; }
+}
+@media (max-width:760px) {
+  .topbar { padding:12px 16px; gap:12px; }
+  .topbar-left { flex-wrap:wrap; justify-content:flex-start; gap:10px; width:100%; }
+  .observatory-wordmark { font-size:21px; }
+  .command-navigation { width:100%; justify-content:space-between; order:3; }
+  .command-navigation .nav-item { width:auto!important; height:auto!important; font-size:12px!important; }
+  .top-right { width:100%; margin:0; gap:8px; flex-wrap:wrap; }
+  .top-right .audience { flex:1; }
+  .mode-switch .mode { font-size:11px; padding:8px; }
+  body:not(.terrain-fullscreen) .workspace { grid-template-columns:minmax(0,1fr)!important; }
+  body:not(.terrain-fullscreen) .workspace > .globe-panel { height:690px; min-height:690px; }
+  body:not(.terrain-fullscreen) .workspace > .insight-panel { max-height:none; border-left:0; padding:28px 22px; }
+  body:not(.terrain-fullscreen) .hero { left:22px; top:24px; }
+  body:not(.terrain-fullscreen) .hero h1 { font-size:32px; }
+  body:not(.terrain-fullscreen) .terrain-head { top:144px; left:22px; right:22px; max-width:none; }
+  body:not(.terrain-fullscreen) .terrain-tools { justify-content:flex-start; }
+  body:not(.terrain-fullscreen) .coordinate-form { flex:1 0 100%; width:100%; }
+  body:not(.terrain-fullscreen) .terrain-caption { top:248px; left:22px; max-width:calc(100% - 44px); font-size:8px; }
+  body:not(.terrain-fullscreen) .sky-position-hud { left:22px; bottom:152px; width:200px; }
+  body:not(.terrain-fullscreen) .terrain-controls { left:22px; bottom:94px; max-width:calc(100% - 44px); flex-wrap:wrap; }
+  body:not(.terrain-fullscreen) .terrain-readout { left:22px; bottom:12px; max-width:calc(100% - 44px); font-size:9px; }
+  body:not(.terrain-fullscreen) .view-height-control { right:22px; bottom:50px; width:160px; }
+  body:not(.terrain-fullscreen) .drag-hint { display:none; }
+  .timeline-panel,.operations-panel,.curious-panel { padding:24px 22px; }
+  .timeline-top { display:block; }
+  .timeline-controls { margin-top:14px; gap:10px; flex-wrap:wrap; }
+  .utc-label { font-size:10px; }
+  .stat-grid .stat { padding:18px 0; }
+  .observatory-footer { padding:24px 22px; }
+  .usage-notes { padding:0 22px 24px; flex-direction:column; gap:8px; }
+  body.terrain-fullscreen .insight-panel h2 { font-size:16px; }
+}
+
+/* Explicit placements supersede the former three-column HUD at every breakpoint. */
+body:not(.terrain-fullscreen) .workspace > .globe-panel { grid-column:1!important; grid-row:1!important; }
+body:not(.terrain-fullscreen) .workspace > .insight-panel { grid-column:2!important; grid-row:1!important; }
+.topbar :is(.profile-button,.icon-button) { width:auto; height:auto; min-width:44px; min-height:44px; }
+:is(.app-shell,.welcome-screen) :is(button,.mode,.panel,.insight-callout,.local-metric,.stat,.operation-result,.modal,.fullscreen-intersection,.earth-zone-result,.quick-site) { background-image:none!important; }
+:is(.app-shell,.welcome-screen) :is(button,.panel,.brand-mark,.local-metric,.stat):hover { box-shadow:none!important; }
+.sky-point,.local-metric strong,.local-metric strong::before { box-shadow:none!important; text-shadow:none!important; }
+.usage-notes details[open] { padding-top:8px; }
+@media(max-width:760px) {
+  body:not(.terrain-fullscreen) .workspace > .insight-panel { grid-column:1!important; grid-row:2!important; }
+  .topbar-left .rover-logo { display:flex!important; }
+}
+
+/* Information hierarchy: period summary first, local technical detail on demand. */
+.observation-period { margin:0 0 18px; color:#aab6c4; font:12px/1.6 var(--sans); max-width:28ch; }
+.observation-details { margin-top:18px; border-bottom:1px solid #29323c; }
+.observation-details > summary { min-height:48px; padding:14px 0; color:#d8e0e9; cursor:pointer; font:13px var(--sans); }
+.observation-details-content { padding-bottom:16px; }
+.observation-details .fullscreen-site-metrics { margin-top:0; }
+.observation-details .insight-callout { margin:12px 0 0; }
+.observatory-explore { margin-top:18px; background:#b7cdf2; font-weight:600; }
+.observatory-fact h3 { font-family:var(--display); font-size:18px; font-weight:400; }
+body.mode-teacher .observatory-learning-link { display:none; }
+.topbar .profile-button { padding-inline:10px; }
+.app-shell .section-index { font-family:var(--sans); letter-spacing:0; text-transform:none; font-size:12px; }
+.welcome-layout .welcome-card h1 { font-family:var(--display); font-weight:400; letter-spacing:-.05em; font-size:clamp(52px,6.4vw,98px); line-height:1.02; }
+.welcome-kicker,.welcome-form > label,.expertise-choices legend { font:13px var(--sans); letter-spacing:0; }
+.welcome-footer { font-family:var(--sans); letter-spacing:0; font-size:11px; }
+.welcome-mission { font:11px var(--sans); letter-spacing:0; }
+body.terrain-fullscreen .observation-period { font-size:11px; margin-bottom:8px; }
+body.terrain-fullscreen .observation-details { margin-top:8px; }
+@media (min-width:761px) {
+  body:not(.terrain-fullscreen) .hero { top:34px; }
+  body:not(.terrain-fullscreen) .terrain-head { top:34px; }
+  body:not(.terrain-fullscreen) .terrain-caption { top:152px; }
+}
+@media (min-width:761px) and (max-width:1150px) {
+  body:not(.terrain-fullscreen) .terrain-head { top:150px; }
+  body:not(.terrain-fullscreen) .terrain-caption { top:246px; }
+}
+@media (max-width:760px) {
+  .welcome-layout .welcome-card h1 { font-size:clamp(48px,12vw,70px); }
+  .observation-period { max-width:none; }
+}
+
+/* Resolved against the legacy HUD cascade after measuring the live page. */
+body:not(.terrain-fullscreen) .workspace { grid-template-rows:auto!important; align-items:stretch; }
+body:not(.terrain-fullscreen) .workspace > .insight-panel { height:clamp(620px,calc(100dvh - 300px),900px)!important; }
+.app-shell .insight-panel .panel-head #siteTitle { font:400 34px/1.12 var(--display); letter-spacing:-.025em; }
+.app-shell .insight-panel .site-select-wrap { margin:0 0 18px; padding:0; border:0; }
+.app-shell #siteSelect { width:100%; border-radius:0!important; font-family:var(--sans); }
+body:not(.terrain-fullscreen) .terrain-stage .terrain-controls { right:auto; width:auto; padding:0; border:0; border-radius:0; background:none; }
+body:not(.terrain-fullscreen) .terrain-head #resetView { width:auto; min-width:90px; padding:8px; font:12px var(--sans); }
+body:not(.terrain-fullscreen) .terrain-head .coordinate-form button { min-width:48px; font:12px var(--sans); }
+.app-shell .topbar .audience { border:0; }
+body.mode-public .teacher-only { display:none!important; }
+@media(max-width:760px) {
+  body:not(.terrain-fullscreen) .workspace > .insight-panel { height:auto!important; }
+}
+
+.app-shell .timeline-panel .timeline-top { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.app-shell .timeline-panel .timeline-controls { display:flex; flex-direction:row; flex-wrap:wrap; justify-content:flex-end; width:auto; gap:12px; margin:0; }
+.app-shell .timeline-panel .timeline-controls .utc-label { margin:0; }
+.app-shell .timeline-panel .timeline-controls .segmented { width:auto; }
+.app-shell .timeline-panel .timeline-chart { margin-top:14px; }
+.app-shell .timeline-panel .chart-inner canvas { height:82px; }
+.app-shell .timeline-panel .chart-y-labels { height:82px; }
+.app-shell .timeline-panel .time-scrub { margin-top:10px; }
+@media(max-width:760px) {
+  .app-shell .timeline-panel .timeline-top { display:block; }
+  .app-shell .timeline-panel .timeline-controls { margin-top:14px; justify-content:flex-start; }
+}
+
+.app-shell .terrain-head :is(#zoomIn,#zoomOut) { width:44px; height:44px; min-width:44px; min-height:44px; }
+body:not(.terrain-fullscreen) .terrain-head #resetView { min-height:44px; }
+body:not(.terrain-fullscreen) .coordinate-form { min-height:44px; }
+body:not(.terrain-fullscreen) .coordinate-form input { font-size:12px; }
+body:not(.terrain-fullscreen) .terrain-controls button { min-height:40px; font:12px var(--sans); }
+@media(max-width:760px) {
+  .app-shell .topbar-left { flex-direction:row; align-items:center; }
+  .app-shell .topbar-left .rover-logo { width:44px; flex:0 0 44px; }
+  .app-shell .topbar .observatory-wordmark { flex:1; }
+  .app-shell .topbar .mode-switch .mode { min-height:44px; }
+  body:not(.terrain-fullscreen) .terrain-head { top:136px; }
+  body:not(.terrain-fullscreen) .terrain-caption { top:246px; }
+  body:not(.terrain-fullscreen) .terrain-controls button { min-height:44px; }
+}
+
+body.terrain-fullscreen #resetView { width:auto; min-width:92px; padding:8px; font:12px var(--sans); }
+body.terrain-fullscreen :is(.fullscreen-mini-graph,.terrain-controls,.view-height-control,.fullscreen-light-control) { border-radius:0!important; box-shadow:none!important; backdrop-filter:none!important; background:#000000!important; }
+body.terrain-fullscreen button { border-radius:0!important; box-shadow:none!important; }
+
+/* Keep terrain tools in flow within their docks, including when 2D options expand. */
+.terrain-top-controls,.terrain-bottom-controls { display:contents; }
+body:not(.terrain-fullscreen) .terrain-top-controls { position:absolute; z-index:8; top:34px; right:24px; width:250px; display:flex; flex-direction:column; gap:12px; align-items:stretch; }
+body:not(.terrain-fullscreen) .terrain-top-controls .terrain-head { position:static; width:100%; max-width:none; padding:0; margin:0; }
+body:not(.terrain-fullscreen) .terrain-top-controls .coordinate-form { width:100%; }
+body:not(.terrain-fullscreen) .terrain-top-controls .map-layer-switch { position:static!important; inset:auto!important; width:100%; max-width:none; margin:0; padding:8px; flex-wrap:wrap; gap:8px; background:#000000; }
+body:not(.terrain-fullscreen) .terrain-top-controls .map-layer-switch > span { flex:1 0 100%; }
+body:not(.terrain-fullscreen) .terrain-top-controls .map-layer-switch button { flex:1 1 auto; min-height:36px; padding:7px; }
+body:not(.terrain-fullscreen) .terrain-top-controls .height-legend { position:static!important; inset:auto!important; width:100%; max-width:none; margin:0; transform:none!important; }
+body:not(.terrain-fullscreen) .terrain-top-controls .terrain-caption { position:static; inset:auto; width:100%; max-width:none; margin:0; font-size:9px; }
+body:not(.terrain-fullscreen) .terrain-bottom-controls { position:absolute; z-index:7; left:30px; right:30px; bottom:18px; display:flex; flex-direction:column; align-items:flex-start; gap:12px; pointer-events:none; }
+body:not(.terrain-fullscreen) .terrain-bottom-controls .terrain-controls { position:static!important; inset:auto!important; max-width:100%; margin:0; flex-wrap:wrap; gap:8px; pointer-events:auto; }
+body:not(.terrain-fullscreen) .terrain-bottom-controls .terrain-readout { position:static!important; inset:auto!important; margin:0; max-width:100%; white-space:normal; }
+/* Simulation time is available before the visibility graph in normal view. */
+body:not(.terrain-fullscreen) .timeline-panel .time-scrub { display:grid!important; grid-template-columns:max-content minmax(0,1fr) max-content; align-items:center; gap:16px; margin:14px 0 8px; padding:0; }
+body:not(.terrain-fullscreen) .timeline-panel .time-scrub input { min-height:32px; }
+@media(min-width:761px) and (max-width:1150px) {
+  body:not(.terrain-fullscreen) .terrain-top-controls { top:150px; right:22px; }
+}
+@media(max-width:760px) {
+  body:not(.terrain-fullscreen) .terrain-top-controls { top:136px; left:22px; right:22px; width:auto; }
+  body:not(.terrain-fullscreen) .terrain-bottom-controls { left:22px; right:22px; bottom:14px; }
+  body:not(.terrain-fullscreen) .terrain-top-controls .map-layer-switch { padding:6px; }
+  body:not(.terrain-fullscreen) .terrain-top-controls .map-layer-switch button { min-height:44px; }
+}
+
+/* Leave the map's scale bar clear below the readout. */
+body.terrain-2d-mode:not(.terrain-fullscreen) .terrain-bottom-controls { bottom:54px; }
+@media(max-width:760px) {
+  body:not(.terrain-fullscreen) .timeline-panel .time-scrub { grid-template-columns:minmax(0,1fr) auto; gap:8px 12px; }
+  body:not(.terrain-fullscreen) .timeline-panel .time-scrub .scrub-date:first-child { grid-column:1 / -1; }
+}
+
+/* Match the supplied Moon GIF's measured RGB(0,0,0) background throughout the UI. */
+:root,[data-theme="space"] { --panel:#000000; --panel2:#111111; --card-bg:#000000; --user-space:#000000; }
+.welcome-layout { background:transparent; }
+.welcome-masthead .welcome-brand .brand-mark { background:transparent; }
+.modal,.toast,.map-point-choice,.globe-tooltip,.chart-hover,.operations-hover { background:#000000!important; }
+.app-shell :is(.stat,.local-metric,.site-coordinates,.insight-callout,.model-facts,.operation-result) { background-color:#000000; }
+
+body.terrain-fullscreen :is(.sky-position-hud,.coordinate-form,#scanRadius,#scanSpacing,#exportCsv,#zoomIn,#zoomOut,#resetView) { background:#000000!important; }
+
+/* Normal 3D: sky data, view buttons and readout occupy separate flow rows. */
+body:not(.terrain-fullscreen):not(.terrain-2d-mode) .terrain-bottom-controls {
+  display:flex; flex-direction:column; align-items:flex-start; gap:12px;
+}
+body:not(.terrain-fullscreen) .terrain-bottom-controls .sky-position-hud {
+  position:static!important; inset:auto!important; margin:0;
+  width:min(280px,100%); max-width:100%; box-sizing:border-box;
+  background:#000; box-shadow:none; backdrop-filter:none;
+}
+body:not(.terrain-fullscreen):not(.terrain-2d-mode) .terrain-top-controls {
+  max-width:calc(100% - 44px);
+}
+body:not(.terrain-fullscreen):not(.terrain-2d-mode) .drag-hint { display:none; }
+@media (max-width: 760px) {
+  body:not(.terrain-fullscreen):not(.terrain-2d-mode) .globe-stage.terrain-stage {
+    min-height:700px!important; height:700px!important;
+  }
+  body:not(.terrain-fullscreen):not(.terrain-2d-mode) .terrain-top-controls {
+    top:150px; left:22px; right:22px; width:auto;
+  }
+}
+
+body:not(.terrain-fullscreen):not(.terrain-2d-mode) .terrain-controls #mapView { display:none; }
+
+
+/* Visibility timeline */
+.app-shell .timeline-panel { background:#0b1119; }
+.app-shell .timeline-panel .timeline-top h2 { font-size:24px; font-weight:600; }
+.app-shell .timeline-panel .timeline-top .panel-subtitle {
+  display:block; margin:5px 0 0; color:#a6b6c7; font:13px/1.5 var(--sans);
+}
+.app-shell .timeline-panel .timeline-controls { align-items:center; }
+.timeline-panel .timeline-controls .segmented {
+  padding:3px; gap:2px; border:1px solid #374554; border-radius:8px; background:#101924;
+}
+.timeline-panel .timeline-controls .segmented button {
+  min-height:34px; padding:5px 11px; border-radius:5px; font:600 12px var(--sans);
+}
+.timeline-panel .timeline-controls .segmented button.active {
+  background:#263747; border-color:#4e6478; color:#fff;
+}
+.timeline-panel .timeline-controls .utc-label,
+.timeline-panel .scrub-date { color:#bdcad7; font-size:11px; }
+body:not(.terrain-fullscreen) .timeline-panel .time-scrub {
+  grid-template-columns:minmax(0,1fr); gap:4px; margin-top:17px;
+}
+.timeline-panel #timeSlider {
+  width:100%; margin:0; accent-color:#f5c84c; cursor:ew-resize;
+}
+.app-shell .timeline-panel .timeline-chart { grid-template-columns:64px minmax(0,1fr); margin-top:8px; }
+.app-shell .timeline-panel .chart-inner canvas { height:82px; }
+.app-shell .timeline-panel .chart-y-labels {
+  height:82px; display:grid; grid-template-rows:30px 16px; align-items:center;
+  gap:12px; padding:12px 0 0; color:#bdcad7; font:12px var(--sans);
+}
+.timeline-panel .chart-x-labels {
+  display:block; position:relative; min-height:21px;
+  color:#bdcad7; font-size:10px;
+}
+.timeline-panel .chart-x-labels span { position:absolute; }
+.timeline-panel .chart-x-labels span:last-child { right:0; }
+.timeline-panel .chart-x-labels span:nth-child(2) { left:23.333%; transform:translateX(-50%); }
+.timeline-panel .chart-x-labels span:nth-child(3) { left:46.667%; transform:translateX(-50%); }
+.timeline-panel .chart-x-labels span:nth-child(4) { left:70%; transform:translateX(-50%); }
+.timeline-panel .timeline-playhead {
+  position:absolute; left:var(--timeline-position,0%); top:6px; height:70px;
+  border-left:2px solid #f1f6fa; pointer-events:none;
+}
+.timeline-panel .chart-hover {
+  position:static; width:max-content; max-width:100%; margin:8px 0 0;
+  padding:0; border:0; background:transparent!important; color:#bdcad7;
+  font:11px var(--mono); white-space:normal;
+}
+@media(max-width:520px){
+  .app-shell .timeline-panel .timeline-controls { gap:8px; }
+  .app-shell .timeline-panel .timeline-chart { grid-template-columns:52px minmax(0,1fr); }
+}
+
+/* Keep the scrubber thumb and playhead on the same horizontal axis. */
+.app-shell .timeline-panel { --timeline-gutter:64px; }
+.app-shell .timeline-panel .timeline-chart {
+  grid-template-columns:var(--timeline-gutter) minmax(0,1fr);
+}
+body .app-shell .timeline-panel .time-scrub {
+  grid-template-columns:var(--timeline-gutter) minmax(0,1fr);
+  column-gap:0;
+}
+.app-shell .timeline-panel .time-scrub .scrub-date {
+  grid-column:2;
+}
+.app-shell .timeline-panel #timeSlider {
+  grid-column:2;
+  appearance:none;
+  width:calc(100% + 14px);
+  max-width:none;
+  height:32px;
+  margin:0 -7px;
+  padding:0;
+  border:0;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.app-shell .timeline-panel #timeSlider::-webkit-slider-runnable-track {
+  height:4px; border:0; border-radius:2px; background:#435569;
+}
+.app-shell .timeline-panel #timeSlider::-webkit-slider-thumb {
+  appearance:none; width:14px; height:14px; margin-top:-5px;
+  border:1px solid #111923; border-radius:50%; background:#f5c84c;
+}
+.app-shell .timeline-panel #timeSlider::-moz-range-track {
+  height:4px; border:0; border-radius:2px; background:#435569;
+}
+.app-shell .timeline-panel #timeSlider::-moz-range-thumb {
+  box-sizing:border-box; width:14px; height:14px;
+  border:1px solid #111923; border-radius:50%; background:#f5c84c;
+}
+.app-shell .timeline-panel #timeSlider:focus-visible {
+  outline:2px solid #d7e8fa; outline-offset:2px;
+}
+@media(max-width:520px){
+  .app-shell .timeline-panel { --timeline-gutter:52px; }
+}
+
+.operations-panel .operations-axis {
+  display:block; position:relative; min-height:1.3em; margin-left:50px; margin-right:12px;
+}
+.operations-axis span { position:absolute; white-space:nowrap; }
+.operations-axis span:nth-child(2) { left:23.3333%; transform:translateX(-50%); }
+.operations-axis span:nth-child(3) { left:46.6667%; transform:translateX(-50%); }
+.operations-axis span:nth-child(4) { left:70%; transform:translateX(-50%); }
+.operations-axis span:last-child { right:0; }
+
+#mapDetailStatus:empty { display:none; }
+.terrain-stage #mapDetailStatus:not(:empty) { position:static!important; white-space:normal; color:#ffe1a1; }
+
+body:not(.terrain-fullscreen):not(.terrain-2d-mode) .terrain-top-controls .terrain-caption { display:none; }

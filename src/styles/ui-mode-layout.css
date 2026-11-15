@@ -1,0 +1,17 @@
+/* Matching track counts let the terrain and data genuinely resize into the released column. */
+@media (min-width: 1281px) {
+  body.mode-public .workspace { grid-template-columns: minmax(0,1.85fr) minmax(294px,.95fr) minmax(300px,1fr); column-gap: 0; }
+  body.mode-teacher .workspace { grid-template-columns: minmax(0,2.7fr) minmax(280px,1.32fr) minmax(0,0fr); column-gap: 0; }
+  body:is(.mode-public,.mode-teacher) .workspace > .globe-panel { margin-right: 14px; }
+  body.mode-public .workspace > .insight-panel { margin-right: 14px; }
+  body.mode-teacher .workspace > .insight-panel { margin-right: 0; }
+}
+@media (min-width: 761px) and (max-width: 1280px) {
+  body.mode-public .workspace { grid-template-columns: minmax(0,1fr) minmax(0,1fr); column-gap: 0; }
+  body.mode-teacher .workspace { grid-template-columns: minmax(0,1fr) minmax(0,0fr); column-gap: 0; }
+  body.mode-public .workspace > .insight-panel { margin-right: 14px; }
+  body.mode-teacher .workspace > .insight-panel { margin-right: 0; }
+}
+body.mode-layout-running .workspace { align-content: start; }
+/* Fullscreen instruments keep their original fixed viewport geometry. */
+body.terrain-fullscreen .workspace > :is(.globe-panel,.insight-panel) { margin-right: 0; }

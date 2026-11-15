@@ -1,0 +1,50 @@
+/* Rover controls: one compact bottom-center bar, shared by both viewport modes. */
+.rover-logo { display: inline-flex; flex: none; text-decoration: none; }
+.rover-logo .brand-mark { width: 44px; height: 44px; }
+.rover-logo--fullscreen { display: none; }
+body.terrain-fullscreen .rover-logo--fullscreen { display: inline-flex; }
+.rover-logo:focus-visible { outline: 2px solid #b9e5ff; outline-offset: 4px; border-radius: 50%; }
+.lunar-rover { position: absolute; z-index: 20; bottom: 12px; left: 50%; translate: -50% 0; width: min(900px,calc(100% - 24px)); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 16px; padding: 8px 12px; border: 1px solid var(--mission-stroke-strong,#4c758b); border-radius: 10px; background: rgba(5,17,29,.88); color: #e5eff8; }
+.lunar-rover[hidden] { display: none !important; }
+.lunar-rover:focus-visible { outline: 2px solid #b9e5ff; outline-offset: 3px; }
+.lunar-rover__top { display: contents; }
+.lunar-rover__message { font-size: 12px; }
+.lunar-rover [data-rover-close] { order: 5; margin-left: auto; }
+.lunar-rover button { min-width: 44px; min-height: 44px; padding: 6px 10px; border: 1px solid #486279; border-radius: 7px; background: #102235; color: #e5eff8; font-size: 14px; touch-action: none; }
+.lunar-rover button:hover,.lunar-rover button:active { background: #24445b; border-color: #9ac7dd; }
+.lunar-rover button:focus-visible { outline: 2px solid #b9e5ff; outline-offset: 2px; }
+.lunar-rover p { margin: 0; font-size: 12px; line-height: 1.4; }
+.lunar-rover #roverInstructions { flex: 1 1 320px; }
+.lunar-rover small { display: block; color: #b7c7d7; font-size: 11px; }
+.lunar-rover__telemetry { font-variant-numeric: tabular-nums; color: #d4e6f1; }
+.lunar-rover__buttons { display: flex; gap: 8px; }
+body.lunar-rover-open :is(#localTerrainFrame,.celestial-cues,.sky-position-hud) { visibility: hidden; }
+/* The scientific toolbar remains accessible above the rover bar. */
+body.lunar-rover-open .terrain-stage .terrain-controls { bottom: calc(var(--rover-bar-height,128px) + 24px) !important; }
+body.lunar-rover-open .terrain-stage .terrain-readout { bottom: calc(var(--rover-bar-height,128px) + 72px); }
+body.lunar-rover-open .terrain-stage .drag-hint { visibility: hidden; }
+body.terrain-fullscreen .lunar-rover { z-index: 1010; position: fixed; bottom: calc(10px + env(safe-area-inset-bottom,0px)); left: 50%; width: min(1000px,calc(100vw - 24px)); }
+body.terrain-fullscreen.lunar-rover-open :is(.fullscreen-light-control,.timeline-panel,.view-height-control) { translate: 0 calc(-1 * (var(--rover-bar-height,128px) + 16px)); }
+@media (max-width: 600px) {
+  .lunar-rover { gap: 6px 8px; padding: 8px; }
+  .lunar-rover__message { flex: 1 1 100%; }
+  .lunar-rover #roverInstructions { flex: 1 1 100%; }
+  .lunar-rover__buttons { gap: 6px; }
+}
+@media (pointer: fine) and (min-width: 801px) {
+  .lunar-rover__buttons { display: none; }
+}
+@keyframes rover-arrive { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.lunar-rover:not([hidden]) { animation: rover-arrive .2s ease-out; }
+@media (prefers-reduced-motion: reduce) { .lunar-rover:not([hidden]) { animation: none; } }
+@media (max-width: 600px) {
+  .lunar-rover small { display: none; }
+  .lunar-rover__message { order: -2; flex: 1 1 calc(100% - 60px); }
+  .lunar-rover [data-rover-close] { order: -1; margin-left: 0; }
+  body.terrain-fullscreen.lunar-rover-open .insight-panel {
+    bottom: max(120px,calc(var(--rover-bar-height,160px) + 24px));
+    max-height: max(60px,calc(100dvh - var(--rover-bar-height,160px) - 150px));
+  }
+}
+
+body.lunar-rover-open .terrain-controls #mapView { display: none !important; }

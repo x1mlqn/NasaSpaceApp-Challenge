@@ -1,0 +1,21 @@
+/* Midnight, lunar silver and restrained ice-blue accents. Data signals retain their meaning. */
+:root,[data-theme="space"] {
+  --primary-hue: 218; --bg: #000000; --bg-gradient-start: #000000; --bg-gradient-end: #000000;
+  --accent-color: #b7cdf2; --theme-glow: #6e8fcb; --gold: #b7cdf2; --gold2: #b7cdf2; --blue: #b7cdf2;
+  --user-accent: #b7cdf2; --user-space: #000000;
+  --text: #f2f3f5; --muted: #a1abba; --dim: #778395;
+  --line: #2a3547; --line2: #1e2838; --card-bg: #000000; --card-border: #2a3547;
+  --mission-ink: #f2f3f5; --mission-muted: #a6b1c0; --mission-faint: #8a99ad;
+  --mission-surface: #000000; --mission-surface-raised: #111111;
+  --mission-stroke: #2a3547; --mission-stroke-strong: #586e91;
+  --mission-sun: #f5c84c; --mission-earth: #f05d6c; --mission-both: #4ad295;
+}
+.mode-teacher { --mode-accent: #b7cdf2; }
+.mode-teacher .globe-panel,.mode-teacher .insight-panel,.mode-teacher .operations-panel,.mode-teacher .horizon-panel { border-color: var(--mission-stroke); background: var(--mission-surface); }
+.mode-teacher .teacher-only .section-index,.mode-teacher .teacher-only .degree-pill { color: var(--accent-color); }
+.topbar,.timeline-panel,.operations-panel,.lower-grid > .panel { border-color: var(--mission-stroke); }
+.command-navigation .nav-item.active,.mode.active { color: var(--mission-ink); }
+.advanced-analysis { border-color: var(--mission-stroke); background: var(--mission-surface); }
+.analysis-title,.scan-controls button,#exportPositionPdf { color: var(--accent-color); }
+.scan-controls button,#exportPositionPdf { border-color: var(--mission-stroke-strong); background: #111111; }
+.scan-controls button:hover,#exportPositionPdf:hover { border-color: var(--accent-color); background: #1c1c1c; }

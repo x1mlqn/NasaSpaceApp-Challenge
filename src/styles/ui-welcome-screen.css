@@ -1,0 +1,107 @@
+/* Editorial lunar welcome: spacious copy on the left, supplied Moon asset on the right. */
+.welcome-screen { padding: 0; background: #000000; overflow-y: auto; overflow-x: hidden; }
+.welcome-screen::before,.welcome-screen::after { display: none; }
+.welcome-layout { position: relative; isolation: isolate; width: 100%; min-height: 100dvh; padding: 36px clamp(24px,6.5vw,112px) 28px; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-rows: auto 1fr auto; gap: 32px; align-items: center; }
+.welcome-masthead { grid-column: 1 / -1; grid-row: 1; display: flex; align-items: center; justify-content: space-between; gap: 20px; z-index: 2; }
+.welcome-brand { margin: 0; color: #f2f3f5; font-size: 12px; letter-spacing: .16em; }
+.welcome-brand b { color: #f2f3f5; }
+.welcome-brand .brand-mark { width: 42px; height: 42px; border-color: #606d80; color: #f2f3f5; box-shadow: none; }
+.welcome-mission { font: 10px/1.5 var(--mono); letter-spacing: .14em; color: #a5aebd; text-align: right; }
+.welcome-mission span { display: block; color: #f2f3f5; margin-top: 4px; }
+.welcome-layout .welcome-card,.welcome-layout .hello-card { grid-column: 1; grid-row: 2; z-index: 2; width: min(100%,560px); max-height: none; padding: 18px 0 26px; border: 0; border-radius: 0; background: transparent; box-shadow: none; backdrop-filter: none; overflow: visible; }
+.welcome-kicker { color: #aab9cf; font: 10px var(--mono); letter-spacing: .18em; }
+.welcome-layout .welcome-card h1 { margin: 23px 0 22px; font: 600 clamp(58px,6.4vw,104px)/.98 var(--display); letter-spacing: -.065em; color: #f2f3f5; text-wrap: balance; }
+.welcome-layout .welcome-card h1 em { font-family: inherit; font-style: normal; font-weight: 300; color: #b7c1d0; }
+.welcome-copy { max-width: 420px; margin: 0 0 28px; color: #aab1bc; font-size: 14px; line-height: 1.75; }
+.welcome-form { display: grid; gap: 12px; max-width: 460px; }
+.welcome-form > label,.expertise-choices legend { font: 10px var(--mono); letter-spacing: .13em; color: #b1bdce; }
+.welcome-form > input { width: 100%; min-height: 48px; padding: 12px 0; border: 0; border-bottom: 1px solid #566174; border-radius: 0; background: transparent; color: #f2f3f5; font-size: 17px; }
+.welcome-form > input::placeholder { color: #818c9d; }
+.welcome-form > input:focus { border-color: #c3d6f5; }
+.expertise-choices { padding: 16px 0 0; margin: 0; border: 0; }
+.expertise-choices legend { padding: 0; margin-bottom: 12px; }
+.welcome-layout .expertise-options { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 10px; }
+.welcome-layout .expertise-option { min-height: 72px; padding: 12px; border: 1px solid #303a48; border-radius: 4px; background: #000000; text-align: left; color: #b8c2d0; }
+.welcome-layout .expertise-option b { display: block; font-size: 13px; font-weight: 550; }
+.welcome-layout .expertise-option small { display: block; margin-top: 5px; font-size: 11px; line-height: 1.45; color: #a3adbd; }
+.welcome-layout .expertise-option.selected { border-color: #a9bfdf; background: #111111; box-shadow: inset 0 -2px #a9bfdf; color: #f2f3f5; }
+.welcome-submit { justify-self: start; display: inline-flex; align-items: center; gap: 34px; min-height: 48px; margin-top: 10px; padding: 13px 20px; border: 1px solid #d2dbea; border-radius: 4px; background: #d2dbea; color: #0a101b; font-size: 13px; font-weight: 650; box-shadow: none; }
+.welcome-submit:hover { background: #eef2f9; color: #0a101b; border-color: #eef2f9; transform: none; }
+.welcome-submit span { color: inherit; }
+.welcome-footnote { display: block; margin-top: 17px; font-size: 10px; line-height: 1.5; color: #949faf; }
+.welcome-moon { position: relative; grid-column: 2; grid-row: 2; align-self: stretch; min-height: 560px; margin: 0 -8vw 0 -6vw; z-index: 0; display: grid; align-content: center; }
+.welcome-moon img { width: 100%; height: auto; max-height: 850px; object-fit: contain; display: block; }
+.welcome-moon figcaption { position: absolute; bottom: 15px; left: 17%; right: 12%; display: flex; align-items: center; justify-content: space-between; gap: 15px; color: #8d98a9; font: 9px/1.5 var(--mono); letter-spacing: .1em; }
+.welcome-moon button { min-width: 58px; min-height: 44px; border: 1px solid #465164; border-radius: 3px; background: #000000; color: #bac6d9; font-size: 11px; }
+.welcome-footer { position: relative; z-index: 2; grid-column: 1 / -1; grid-row: 3; padding: 16px 0 0; border-top: 1px solid #262c35; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; color: #8793a5; font: 9px/1.5 var(--mono); letter-spacing: .1em; }
+.welcome-footer i { margin: 0 9px; font-style: normal; color: #adbdd4; }
+.welcome-layout .hello-card { min-width: 0; justify-items: start; text-align: left; }
+.welcome-layout .hello-card > p { margin-top: 38px; font-size: 17px; }
+.welcome-layout .hello-card h2 { font-size: clamp(44px,6vw,86px); overflow-wrap: anywhere; margin-top: 14px; }
+.hello-enter { margin-top: 30px; border-radius: 4px; }
+@media (min-width: 1500px) { .welcome-layout { min-height: 100dvh; } }
+@media (max-width: 900px) {
+  .welcome-layout { gap: 22px; padding: 24px 28px; grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr); }
+  .welcome-moon { margin-left: -18vw; margin-right: -18vw; opacity: .7; }
+  .welcome-layout .welcome-card h1 { font-size: clamp(54px,8vw,80px); }
+  .welcome-moon figcaption { left: 28%; right: 24%; font-size: 8px; }
+}
+@media (max-width: 600px) {
+  .welcome-layout { padding: 20px; grid-template-columns: minmax(0,1fr); grid-template-rows: auto auto auto; gap: 20px; }
+  .welcome-mission { font-size: 8px; letter-spacing: .05em; }
+  .welcome-brand { font-size: 10px; }
+  .welcome-moon { position: absolute; top: 80px; right: -110px; width: 380px; min-height: 0; margin: 0; opacity: .34; pointer-events: none; }
+  .welcome-moon figcaption { pointer-events: auto; left: auto; right: 125px; bottom: 25px; }
+  .welcome-moon figcaption > span { display: none; }
+  .welcome-layout .welcome-card,.welcome-layout .hello-card { grid-column: 1; padding-top: 32px; }
+  .welcome-layout .welcome-card h1 { font-size: clamp(56px,15vw,80px); }
+  .welcome-copy { max-width: 310px; font-size: 13px; }
+  .welcome-layout .expertise-options { grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); }
+  .welcome-layout .expertise-option { padding: 10px; }
+  .welcome-layout .expertise-option b { font-size: 12px; }
+  .welcome-layout .expertise-option small { font-size: 10px; }
+  .welcome-moon figcaption { position: fixed; bottom: 8px; right: 12px; z-index: 5; }
+  .welcome-footer { padding-right: 65px; font-size: 8px; }
+  .welcome-footer > span:last-child { display: none; }
+}
+@media (prefers-reduced-transparency: reduce) { .welcome-moon { opacity: .35; } }
+/* The Moon is art, not a layout spacer: it never pushes the masthead off screen. */
+.welcome-screen { place-items: start stretch; background: #000; }
+.welcome-moon img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: contain; }
+@media (max-width: 600px) { .welcome-moon { aspect-ratio: 322 / 400; } }
+/* Isolate the new masthead and option cards from legacy mobile sidebar rules. */
+.welcome-masthead .welcome-brand { display: flex; justify-content: flex-start; }
+.welcome-masthead .welcome-brand > span:last-child { font-size: inherit; }
+.welcome-layout .expertise-option { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 0; }
+.welcome-layout { overflow-x: clip; }
+.welcome-footer #moonAnimationToggle { min-width: 68px; min-height: 44px; padding: 8px 12px; border: 1px solid #465164; border-radius: 3px; background: #000000; color: #bac6d9; font-size: 11px; cursor: pointer; }
+.welcome-footer #moonAnimationToggle:disabled { opacity: .6; cursor: default; }
+@media (max-width: 600px) {
+  .welcome-footer { display: grid; grid-template-columns: minmax(0,1fr) auto; padding-right: 0; align-items: center; gap: 8px 12px; }
+  .welcome-footer > span { grid-column: 1; }
+  .welcome-footer #moonAnimationToggle { grid-column: 2; grid-row: 1 / span 2; }
+  .welcome-moon figcaption { display: none; }
+}
+
+/* Welcome is a viewport, not a scrolling document. */
+html:has(body.welcome-active), body.welcome-active { height: 100%; overflow: hidden; overscroll-behavior: none; }
+body.welcome-active .welcome-screen { height: 100dvh; overflow: hidden; overscroll-behavior: none; }
+.welcome-layout { height: 100dvh; min-height: 0; grid-template-rows: auto minmax(0,1fr) auto; box-sizing: border-box; }
+.welcome-layout .welcome-card,.welcome-layout .hello-card { min-height: 0; }
+.welcome-moon { min-height: 0; max-height: 100%; }
+@media (max-height: 850px) {
+  .welcome-layout { padding-block: 16px; gap: 12px; }
+  .welcome-layout .welcome-card,.welcome-layout .hello-card { padding-block: 0; }
+  .welcome-layout .welcome-card h1 { font-size: clamp(36px,8.5dvh,72px); margin-block: 12px; }
+  .welcome-copy { margin-block: 10px; }
+  .welcome-layout .welcome-form { gap: 10px; }
+  .welcome-footer { padding-top: 8px; }
+}
+@media (max-height: 650px) {
+  .welcome-layout { padding-block: 8px; gap: 6px; }
+  .welcome-layout .welcome-card h1 { font-size: clamp(28px,7dvh,46px); margin-block: 6px; }
+  .welcome-copy { font-size: 12px; margin-block: 6px; }
+  .welcome-layout .expertise-option { padding: 8px; }
+  .welcome-masthead .brand-mark { width: 28px; height: 28px; }
+  .welcome-footer { font-size: 8px; }
+}
